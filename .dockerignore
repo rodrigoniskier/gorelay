@@ -1,0 +1,14 @@
+*
+!go.mod
+!go.sum
+!cmd/
+!cmd/**
+**/*_test.go
+
+!LICENSE
+!LICENSING.md
+!LICENSE-SCOPE.json
+!ASSET-RIGHTS.md
+!THIRD-PARTY-NOTICES.md
+!licenses/
+!licenses/**

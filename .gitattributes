@@ -1,0 +1,4 @@
+# Preserve approved historical visual bytes;normal whitespace checks apply elsewhere.
+docs/assets/dashboard.png binary
+docs/benchmarks/exploratory-throughput.svg -text
+docs/benchmarks/controlled-scalability.svg -text whitespace=blank-at-eof,space-before-tab,-blank-at-eol

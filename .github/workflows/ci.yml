@@ -1,0 +1,45 @@
+name: Go CI
+
+on: [push, pull_request]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      GOTOOLCHAIN: local
+      REQUIRE_POSTGRES_TESTS: "1"
+      TEST_DATABASE_URL: postgres://gorelay:gorelay-ci-only@127.0.0.1:5432/gorelay_test?sslmode=disable
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_DB: gorelay_test
+          POSTGRES_USER: gorelay
+          POSTGRES_PASSWORD: gorelay-ci-only
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U gorelay -d gorelay_test"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6
+        with:
+          go-version-file: go.mod
+          cache: false
+      - name: Report effective toolchain
+        run: go version
+      - name: Verify with required PostgreSQL integration and race detector
+        run: sh scripts/verify.sh
+      - name: Check curated benchmark arithmetic (no load)
+        run: python3 scripts/check-benchmarks.py
+      - name: Build runtime Docker image (local only)
+        run: docker build --pull -t gorelay:ci .

@@ -1,0 +1,615 @@
+{
+  "scope": "MIT applies exclusively to original source contents explicitly listed below; all other repository content is excluded unless separately licensed.",
+  "baseline": "8272a1ea6295758eabb620c261ead135b1b8024f",
+  "copyright_holder": "Rodrigo Niskier Ferreira Barbosa",
+  "copyright_year": 2026,
+  "license_text": "LICENSE",
+  "included_original_source": [
+    {
+      "path": "cmd/gorelay/dashboard_assets/app.css",
+      "sha256": "0b57c0b43c80fee64858d7c06d72d15bc26023f90c30d917e8c8091bce82b26d",
+      "bytes": 12106,
+      "license": "MIT",
+      "scope": "Original GoRelay source portions only; third-party material retains its own rights."
+    },
+    {
+      "path": "cmd/gorelay/dashboard_assets/app.js",
+      "sha256": "c0891593719134569c253f70c93a6c32ffa415ff0c3c12c349bf48e61f0ad8c2",
+      "bytes": 9740,
+      "license": "MIT",
+      "scope": "Original GoRelay source portions only; third-party material retains its own rights."
+    },
+    {
+      "path": "cmd/gorelay/dashboard_assets/index.html",
+      "sha256": "39358feb932ab3da814df2c03cd82d0aca38cec04d6fb718482780109db42262",
+      "bytes": 6534,
+      "license": "MIT",
+      "scope": "Original GoRelay source portions only; third-party material retains its own rights."
+    },
+    {
+      "path": "cmd/gorelay/dashboard_demo.go",
+      "sha256": "11ec365f8f907bc53107fc86b600298ee78211454cd41b481c5eebec3f1f484a",
+      "bytes": 6679,
+      "license": "MIT",
+      "scope": "Original GoRelay source portions only; third-party material retains its own rights."
+    },
+    {
+      "path": "cmd/gorelay/dashboard_store.go",
+      "sha256": "93f05245656b0e9ce73375edc04db8a3a22beaa1b45d6ac7e9f18a0bd326779c",
+      "bytes": 6619,
+      "license": "MIT",
+      "scope": "Original GoRelay source portions only; third-party material retains its own rights."
+    },
+    {
+      "path": "cmd/gorelay/dashboard_ui.go",
+      "sha256": "d719c8e8b8a94779a008f98367e6f27dcee35dcbe043d8c65a64774fda4fcdd4",
+      "bytes": 1204,
+      "license": "MIT",
+      "scope": "Original GoRelay source portions only; third-party material retains its own rights."
+    },
+    {
+      "path": "cmd/gorelay/events.go",
+      "sha256": "467df13f363042a24b1c778bfc3d007df4b6d666c0c29d8af7622fd8dd87f426",
+      "bytes": 8907,
+      "license": "MIT",
+      "scope": "Original GoRelay source portions only; third-party material retains its own rights."
+    },
+    {
+      "path": "cmd/gorelay/http_processor.go",
+      "sha256": "002b81270959e165b639dc9f2fc7095009b673f0656a2d4ed02e23f666c7b1a8",
+      "bytes": 8026,
+      "license": "MIT",
+      "scope": "Original GoRelay source portions only; third-party material retains its own rights."
+    },
+    {
+      "path": "cmd/gorelay/leases.go",
+      "sha256": "e8af05604f72f1b7c7afd32270afc9835d99e357f81063544b45b2e801b48fd8",
+      "bytes": 3095,
+      "license": "MIT",
+      "scope": "Original GoRelay source portions only; third-party material retains its own rights."
+    },
+    {
+      "path": "cmd/gorelay/local.go",
+      "sha256": "82b45209197179dd8c6f5e8323b0042453d68a22bd742a64765aa53700c9ad19",
+      "bytes": 2009,
+      "license": "MIT",
+      "scope": "Original GoRelay source portions only; third-party material retains its own rights."
+    },
+    {
+      "path": "cmd/gorelay/main.go",
+      "sha256": "598ca1c4a4f96830c50d608e75bc553e97b6c59611b9d945ff44712df4a6b492",
+      "bytes": 4799,
+      "license": "MIT",
+      "scope": "Original GoRelay source portions only; third-party material retains its own rights."
+    },
+    {
+      "path": "cmd/gorelay/migrations.go",
+      "sha256": "333b941590063364788303a766c0785ecdbfe92ff9d3251fddfbcb7b4b9494a7",
+      "bytes": 3461,
+      "license": "MIT",
+      "scope": "Original GoRelay source portions only; third-party material retains its own rights."
+    },
+    {
+      "path": "cmd/gorelay/migrations/0001_events.sql",
+      "sha256": "0a8264692bdf89f6f358e195a21245d1dc859a8b4503a5b2532ad062fd042d5e",
+      "bytes": 492,
+      "license": "MIT",
+      "scope": "Original GoRelay source portions only; third-party material retains its own rights."
+    },
+    {
+      "path": "cmd/gorelay/migrations/0002_event_destination.sql",
+      "sha256": "487bd99acbc88237e2c18a4da3a7b469d8c59cf6087b23e81d52b9033947ddb2",
+      "bytes": 701,
+      "license": "MIT",
+      "scope": "Original GoRelay source portions only; third-party material retains its own rights."
+    },
+    {
+      "path": "cmd/gorelay/migrations/0003_processing_leases.sql",
+      "sha256": "688565f8bd710b434c0548e4eac8018480ec5c771c1dd80cc78feb893495d081",
+      "bytes": 1404,
+      "license": "MIT",
+      "scope": "Original GoRelay source portions only; third-party material retains its own rights."
+    },
+    {
+      "path": "cmd/gorelay/migrations/0004_http_delivery.sql",
+      "sha256": "3965d7afcd77ece853eed8c3e6489341a46c743a4f7f4aae47325da3d4c4ff58",
+      "bytes": 1126,
+      "license": "MIT",
+      "scope": "Original GoRelay source portions only; third-party material retains its own rights."
+    },
+    {
+      "path": "cmd/gorelay/migrations/0005_retry_dead_letter.sql",
+      "sha256": "3ba603354d55e7b5d1ee073dadf677dc8e9b26dc3bd33f0750b1a819455f5c27",
+      "bytes": 4434,
+      "license": "MIT",
+      "scope": "Original GoRelay source portions only; third-party material retains its own rights."
+    },
+    {
+      "path": "cmd/gorelay/retry_policy.go",
+      "sha256": "faf66f06974a66ccb6f948679d34b57b3026ce8709f794750f42931eaf30a1c8",
+      "bytes": 5159,
+      "license": "MIT",
+      "scope": "Original GoRelay source portions only; third-party material retains its own rights."
+    },
+    {
+      "path": "cmd/gorelay/retry_store.go",
+      "sha256": "4c1dcf86ee754940f3a8bed2fe37dd7873965198df63e6cedc0d7fa03dde6d47",
+      "bytes": 9015,
+      "license": "MIT",
+      "scope": "Original GoRelay source portions only; third-party material retains its own rights."
+    },
+    {
+      "path": "cmd/gorelay/workers.go",
+      "sha256": "f49ea6302f1d7fb63dac8d11dbb037e189706bb9bfaae6049cc78f39bbded2eb",
+      "bytes": 5471,
+      "license": "MIT",
+      "scope": "Original GoRelay source portions only; third-party material retains its own rights."
+    }
+  ],
+  "excluded_categories": {
+    "B": "Tests and scripts: scope inclusion is not granted here.",
+    "C": "Configurations and module/build metadata: not automatically MIT.",
+    "D": "Standalone documentation, reports, evidence, logs and datasets: not automatically MIT.",
+    "E": "49 historical visual contents: independent reuse rights reserved.",
+    "F": "Third-party components and quoted content: upstream terms, not relicensed.",
+    "G": "Unknown, private, cache, binary, archive and other new files: not covered."
+  },
+  "reserved_visual_contents": [
+    {
+      "stable_id": "GR-VIS-1493f9d75fef1a79207ad773dc572569a19a9cffc85023468f5189a31b3324e0",
+      "sha256": "1493f9d75fef1a79207ad773dc572569a19a9cffc85023468f5189a31b3324e0",
+      "bytes": 188779,
+      "historical_source_paths": [
+        "docs/evidence/stage4/auditor-mobile390.png"
+      ],
+      "public_paths": []
+    },
+    {
+      "stable_id": "GR-VIS-49fa6e7c7e8a2fef388a6d47cb872c5919cad998076643de48ff8b6eb6d8596b",
+      "sha256": "49fa6e7c7e8a2fef388a6d47cb872c5919cad998076643de48ff8b6eb6d8596b",
+      "bytes": 287786,
+      "historical_source_paths": [
+        "docs/evidence/stage4/browser3-dashboard-dead-letter.png"
+      ],
+      "public_paths": []
+    },
+    {
+      "stable_id": "GR-VIS-bc66394aa6545392ae911015d43965938f2bed63af1f87a903987490e3f6c671",
+      "sha256": "bc66394aa6545392ae911015d43965938f2bed63af1f87a903987490e3f6c671",
+      "bytes": 265934,
+      "historical_source_paths": [
+        "docs/evidence/stage4/browser3-dashboard-healthy.png"
+      ],
+      "public_paths": []
+    },
+    {
+      "stable_id": "GR-VIS-8b95afb060c4aee97f18feb324b158838a1d395100440961b2fc737b68aaa346",
+      "sha256": "8b95afb060c4aee97f18feb324b158838a1d395100440961b2fc737b68aaa346",
+      "bytes": 223330,
+      "historical_source_paths": [
+        "docs/evidence/stage4/browser3-dashboard-mobile.png"
+      ],
+      "public_paths": []
+    },
+    {
+      "stable_id": "GR-VIS-0dcd13551fa8ace27194335788db721898a19f4191fce3ea2b4800cd75958ded",
+      "sha256": "0dcd13551fa8ace27194335788db721898a19f4191fce3ea2b4800cd75958ded",
+      "bytes": 283783,
+      "historical_source_paths": [
+        "docs/evidence/stage4/browser3-dashboard-retrying.png"
+      ],
+      "public_paths": []
+    },
+    {
+      "stable_id": "GR-VIS-c50f20b2ccd55a29fc73d04152bfd2a79b40e0a4d4712f0d3e970de0069fb541",
+      "sha256": "c50f20b2ccd55a29fc73d04152bfd2a79b40e0a4d4712f0d3e970de0069fb541",
+      "bytes": 345155,
+      "historical_source_paths": [
+        "docs/evidence/stage4/contrast-fix/auditor-1440.png"
+      ],
+      "public_paths": []
+    },
+    {
+      "stable_id": "GR-VIS-4c874d1827575f3c6e985ca8e9e8ca971acfac62f379d1f0611a1fd0de5d1f6d",
+      "sha256": "4c874d1827575f3c6e985ca8e9e8ca971acfac62f379d1f0611a1fd0de5d1f6d",
+      "bytes": 245320,
+      "historical_source_paths": [
+        "docs/evidence/stage4/contrast-fix/auditor-390.png"
+      ],
+      "public_paths": []
+    },
+    {
+      "stable_id": "GR-VIS-9f46cfbf06805aff73f6aafb4e7d55c93c294f4d9db00ed89c0378fe05bd6ba5",
+      "sha256": "9f46cfbf06805aff73f6aafb4e7d55c93c294f4d9db00ed89c0378fe05bd6ba5",
+      "bytes": 345212,
+      "historical_source_paths": [
+        "docs/evidence/stage4/contrast-fix/desktop-1440.png"
+      ],
+      "public_paths": []
+    },
+    {
+      "stable_id": "GR-VIS-290bf761516ff9d3152f0374ddd192474539a135461ed7cd04cb195239e22d61",
+      "sha256": "290bf761516ff9d3152f0374ddd192474539a135461ed7cd04cb195239e22d61",
+      "bytes": 245261,
+      "historical_source_paths": [
+        "docs/evidence/stage4/contrast-fix/mobile-390.png"
+      ],
+      "public_paths": []
+    },
+    {
+      "stable_id": "GR-VIS-b937a78094e8bb6bdcbba1839bb65a3f95c53c6babbc69e6b226cc0520bfd72f",
+      "sha256": "b937a78094e8bb6bdcbba1839bb65a3f95c53c6babbc69e6b226cc0520bfd72f",
+      "bytes": 295551,
+      "historical_source_paths": [
+        "docs/evidence/stage4/final-dashboard-dead-letter.png"
+      ],
+      "public_paths": []
+    },
+    {
+      "stable_id": "GR-VIS-4ae938949396e89a0d9af483c6f31e7b14a315192bed83ba298f7c339c640777",
+      "sha256": "4ae938949396e89a0d9af483c6f31e7b14a315192bed83ba298f7c339c640777",
+      "bytes": 272612,
+      "historical_source_paths": [
+        "docs/evidence/stage4/final-dashboard-healthy.png"
+      ],
+      "public_paths": []
+    },
+    {
+      "stable_id": "GR-VIS-7000155e62aeecbfd9c09ebc45d8ded71e2c97525a10daecb3dadf48830391cd",
+      "sha256": "7000155e62aeecbfd9c09ebc45d8ded71e2c97525a10daecb3dadf48830391cd",
+      "bytes": 218840,
+      "historical_source_paths": [
+        "docs/evidence/stage4/final-dashboard-mobile.png"
+      ],
+      "public_paths": []
+    },
+    {
+      "stable_id": "GR-VIS-cf52f72fa6caf4fd9419b837d59076687f2b7a274096e5a3b52a8824facde75e",
+      "sha256": "cf52f72fa6caf4fd9419b837d59076687f2b7a274096e5a3b52a8824facde75e",
+      "bytes": 290791,
+      "historical_source_paths": [
+        "docs/evidence/stage4/final-dashboard-retrying.png"
+      ],
+      "public_paths": []
+    },
+    {
+      "stable_id": "GR-VIS-539384a9cf1180ce7e727d8a0c0fbf400ba084738ae610138d0cbacedd1b7168",
+      "sha256": "539384a9cf1180ce7e727d8a0c0fbf400ba084738ae610138d0cbacedd1b7168",
+      "bytes": 345615,
+      "historical_source_paths": [
+        "docs/evidence/stage4/preflight/desktop-1440.png"
+      ],
+      "public_paths": []
+    },
+    {
+      "stable_id": "GR-VIS-64c206d5fd4fef2d2630055411fa96d6cb343c88e75e6eb8bb05e9b80cce4572",
+      "sha256": "64c206d5fd4fef2d2630055411fa96d6cb343c88e75e6eb8bb05e9b80cce4572",
+      "bytes": 248144,
+      "historical_source_paths": [
+        "docs/evidence/stage4/preflight/mobile-390.png"
+      ],
+      "public_paths": []
+    },
+    {
+      "stable_id": "GR-VIS-b80f62ab0d098e724bbce57a7f2cf64a11ac5a3486072a1d78939c25161e14e1",
+      "sha256": "b80f62ab0d098e724bbce57a7f2cf64a11ac5a3486072a1d78939c25161e14e1",
+      "bytes": 208905,
+      "historical_source_paths": [
+        "docs/evidence/stage5a/preflight/publication/figures/latencies.png"
+      ],
+      "public_paths": []
+    },
+    {
+      "stable_id": "GR-VIS-7f5157b20f33db6057a3c2e45aae7abb273273224645b5e54d48c7d477d7310f",
+      "sha256": "7f5157b20f33db6057a3c2e45aae7abb273273224645b5e54d48c7d477d7310f",
+      "bytes": 103758,
+      "historical_source_paths": [
+        "docs/evidence/stage5a/preflight/publication/figures/latencies.svg"
+      ],
+      "public_paths": []
+    },
+    {
+      "stable_id": "GR-VIS-906dd37416c05e13d0e803c9546c6007d77f5cfc77f20b8b37ba773636387988",
+      "sha256": "906dd37416c05e13d0e803c9546c6007d77f5cfc77f20b8b37ba773636387988",
+      "bytes": 100125,
+      "historical_source_paths": [
+        "docs/evidence/stage5a/preflight/publication/figures/throughput.png"
+      ],
+      "public_paths": []
+    },
+    {
+      "stable_id": "GR-VIS-7e7f6a2f8f2bf419bec4edd33255c47ec5b71486797f4fdbafd1a80ca724d285",
+      "sha256": "7e7f6a2f8f2bf419bec4edd33255c47ec5b71486797f4fdbafd1a80ca724d285",
+      "bytes": 70887,
+      "historical_source_paths": [
+        "docs/evidence/stage5a/preflight/publication/figures/throughput.svg"
+      ],
+      "public_paths": [
+        "docs/benchmarks/exploratory-throughput.svg"
+      ]
+    },
+    {
+      "stable_id": "GR-VIS-6267a577103884eefaf6081dfda02e3b3da417b4c0564e421e56e0162fd457f5",
+      "sha256": "6267a577103884eefaf6081dfda02e3b3da417b4c0564e421e56e0162fd457f5",
+      "bytes": 25940,
+      "historical_source_paths": [
+        "docs/evidence/stage5b/scalability.png"
+      ],
+      "public_paths": []
+    },
+    {
+      "stable_id": "GR-VIS-e72ff13dc4e1e2666efcf1cd90aabd5df8926af50ecda37d03f8b3a97b6716f8",
+      "sha256": "e72ff13dc4e1e2666efcf1cd90aabd5df8926af50ecda37d03f8b3a97b6716f8",
+      "bytes": 34043,
+      "historical_source_paths": [
+        "docs/evidence/stage5b/scalability.svg"
+      ],
+      "public_paths": [
+        "docs/benchmarks/controlled-scalability.svg"
+      ]
+    },
+    {
+      "stable_id": "GR-VIS-3e7128afec44b8a88f1687771553dfe1fdff5fbc5320049cae20a9ad78b2654e",
+      "sha256": "3e7128afec44b8a88f1687771553dfe1fdff5fbc5320049cae20a9ad78b2654e",
+      "bytes": 66549,
+      "historical_source_paths": [
+        "docs/evidence/stage5b/stability.png"
+      ],
+      "public_paths": []
+    },
+    {
+      "stable_id": "GR-VIS-accb2bbff34c2f8900890d4c759ca6951dcd1b8f7a130cde03f6d68724acaa98",
+      "sha256": "accb2bbff34c2f8900890d4c759ca6951dcd1b8f7a130cde03f6d68724acaa98",
+      "bytes": 46640,
+      "historical_source_paths": [
+        "docs/evidence/stage5b/stability.svg"
+      ],
+      "public_paths": []
+    },
+    {
+      "stable_id": "GR-VIS-f3bc1b086e49cce5012f0440b4150706f05e4491e695988e33f2661680dd5489",
+      "sha256": "f3bc1b086e49cce5012f0440b4150706f05e4491e695988e33f2661680dd5489",
+      "bytes": 158693,
+      "historical_source_paths": [
+        "docs/evidence/stage6b/after/desktop-dialog.png"
+      ],
+      "public_paths": []
+    },
+    {
+      "stable_id": "GR-VIS-ed8a29b174fd58ce80024bb5da755521da83c9ec2aad3ccb252b9ed01bc5b7b8",
+      "sha256": "ed8a29b174fd58ce80024bb5da755521da83c9ec2aad3ccb252b9ed01bc5b7b8",
+      "bytes": 249371,
+      "historical_source_paths": [
+        "docs/evidence/stage6b/after/desktop-empty-fallback.png"
+      ],
+      "public_paths": []
+    },
+    {
+      "stable_id": "GR-VIS-31d83a40fde13833d5ffa4aa2fa1cdf2a0d2834c93b36f16881238a5eeb3d584",
+      "sha256": "31d83a40fde13833d5ffa4aa2fa1cdf2a0d2834c93b36f16881238a5eeb3d584",
+      "bytes": 245879,
+      "historical_source_paths": [
+        "docs/evidence/stage6b/after/desktop-initial-503.png"
+      ],
+      "public_paths": []
+    },
+    {
+      "stable_id": "GR-VIS-b5bce65a219a17e988fb5df1a95901791383c4c9a802532c6ade97913743bd04",
+      "sha256": "b5bce65a219a17e988fb5df1a95901791383c4c9a802532c6ade97913743bd04",
+      "bytes": 256244,
+      "historical_source_paths": [
+        "docs/evidence/stage6b/after/viewport-1440-hover.png"
+      ],
+      "public_paths": []
+    },
+    {
+      "stable_id": "GR-VIS-e3c3c0a83b75b544f7188baa4a49b1c41ed7d9968b876030ec33240328a572fe",
+      "sha256": "e3c3c0a83b75b544f7188baa4a49b1c41ed7d9968b876030ec33240328a572fe",
+      "bytes": 193337,
+      "historical_source_paths": [
+        "docs/evidence/stage6b/after/viewport-390-hover.png"
+      ],
+      "public_paths": []
+    },
+    {
+      "stable_id": "GR-VIS-0889abbe055a9dcc9df7dcfa4ad07746f2ce5f6438029d60aff5910dc1d9e867",
+      "sha256": "0889abbe055a9dcc9df7dcfa4ad07746f2ce5f6438029d60aff5910dc1d9e867",
+      "bytes": 249595,
+      "historical_source_paths": [
+        "docs/evidence/stage6b/audit-ui/independent-run-r2/desktop-modal-removal.png"
+      ],
+      "public_paths": []
+    },
+    {
+      "stable_id": "GR-VIS-4dee82633348fdb3f6e102f9ca5ed64cce0a44fc8d7959a4322b22f7461c11a4",
+      "sha256": "4dee82633348fdb3f6e102f9ca5ed64cce0a44fc8d7959a4322b22f7461c11a4",
+      "bytes": 249572,
+      "historical_source_paths": [
+        "docs/evidence/stage6b/audit-ui/independent-run-r2/desktop-recovered.png"
+      ],
+      "public_paths": []
+    },
+    {
+      "stable_id": "GR-VIS-eafeb00504897246b23380b80d178b966edd64d9e3871cc9a0bd8e0912390121",
+      "sha256": "eafeb00504897246b23380b80d178b966edd64d9e3871cc9a0bd8e0912390121",
+      "bytes": 249633,
+      "historical_source_paths": [
+        "docs/evidence/stage6b/audit-ui/independent-run-r2/viewport-1440.png"
+      ],
+      "public_paths": []
+    },
+    {
+      "stable_id": "GR-VIS-ef1e8b5efdff33da1909b21ec48b2a7659d1e98dc1a10b3422261f50f9763bf5",
+      "sha256": "ef1e8b5efdff33da1909b21ec48b2a7659d1e98dc1a10b3422261f50f9763bf5",
+      "bytes": 188334,
+      "historical_source_paths": [
+        "docs/evidence/stage6b/audit-ui/independent-run-r2/viewport-390.png"
+      ],
+      "public_paths": []
+    },
+    {
+      "stable_id": "GR-VIS-19647964f52ce39a618604896fbe6f91448efa4f2b9b015f803ba0d6dac95859",
+      "sha256": "19647964f52ce39a618604896fbe6f91448efa4f2b9b015f803ba0d6dac95859",
+      "bytes": 249595,
+      "historical_source_paths": [
+        "docs/evidence/stage6b/audit-ui/independent-run-r3/desktop-modal-removal.png"
+      ],
+      "public_paths": []
+    },
+    {
+      "stable_id": "GR-VIS-255f3b0ac8db50eed2f051d1fa67a1b12eb63162244c7df52aeb18e211f1c7c8",
+      "sha256": "255f3b0ac8db50eed2f051d1fa67a1b12eb63162244c7df52aeb18e211f1c7c8",
+      "bytes": 249568,
+      "historical_source_paths": [
+        "docs/evidence/stage6b/audit-ui/independent-run-r3/desktop-recovered.png"
+      ],
+      "public_paths": []
+    },
+    {
+      "stable_id": "GR-VIS-a1e02be31e26f603b820244bd7524cdc48b1d0c37f8e7197c098f3ca0ec22be3",
+      "sha256": "a1e02be31e26f603b820244bd7524cdc48b1d0c37f8e7197c098f3ca0ec22be3",
+      "bytes": 249628,
+      "historical_source_paths": [
+        "docs/evidence/stage6b/audit-ui/independent-run-r3/viewport-1440.png"
+      ],
+      "public_paths": []
+    },
+    {
+      "stable_id": "GR-VIS-cb90d1b025e36ea8f5e07f901035be68babd3bf0f8c3cd575e87b17d3b22b321",
+      "sha256": "cb90d1b025e36ea8f5e07f901035be68babd3bf0f8c3cd575e87b17d3b22b321",
+      "bytes": 188125,
+      "historical_source_paths": [
+        "docs/evidence/stage6b/audit-ui/independent-run-r3/viewport-390.png"
+      ],
+      "public_paths": []
+    },
+    {
+      "stable_id": "GR-VIS-03db21751650ffc2cbb801e6138ee172f19f6eaf6dcbc7f5bbe8cc11a9d81884",
+      "sha256": "03db21751650ffc2cbb801e6138ee172f19f6eaf6dcbc7f5bbe8cc11a9d81884",
+      "bytes": 192549,
+      "historical_source_paths": [
+        "docs/evidence/stage6b/audit-ui/mobile-keyboard/mobile-keyboard-return.png"
+      ],
+      "public_paths": []
+    },
+    {
+      "stable_id": "GR-VIS-4588b4d355df4769950a528c863014908912dde9f9525845eff16181b6f492d6",
+      "sha256": "4588b4d355df4769950a528c863014908912dde9f9525845eff16181b6f492d6",
+      "bytes": 158619,
+      "historical_source_paths": [
+        "docs/evidence/stage6b/before-r2/desktop-dialog.png"
+      ],
+      "public_paths": []
+    },
+    {
+      "stable_id": "GR-VIS-a5c68069a5a80f31c2f416c323466226bcfa58a08378099ba26020288da4d841",
+      "sha256": "a5c68069a5a80f31c2f416c323466226bcfa58a08378099ba26020288da4d841",
+      "bytes": 249428,
+      "historical_source_paths": [
+        "docs/evidence/stage6b/before-r2/desktop-empty-fallback.png"
+      ],
+      "public_paths": []
+    },
+    {
+      "stable_id": "GR-VIS-2780926a0046533cd444e6b947acf58b1bda5f76c8ae1ba3590e8115e3ef338e",
+      "sha256": "2780926a0046533cd444e6b947acf58b1bda5f76c8ae1ba3590e8115e3ef338e",
+      "bytes": 245842,
+      "historical_source_paths": [
+        "docs/evidence/stage6b/before-r2/desktop-initial-503.png",
+        "docs/evidence/stage6b/before/desktop-initial-503.png"
+      ],
+      "public_paths": []
+    },
+    {
+      "stable_id": "GR-VIS-c3516a5cc52993f0b20f67b4678ad1856e2abadfce733df4cb32d189376f1b11",
+      "sha256": "c3516a5cc52993f0b20f67b4678ad1856e2abadfce733df4cb32d189376f1b11",
+      "bytes": 256142,
+      "historical_source_paths": [
+        "docs/evidence/stage6b/before-r2/viewport-1440-hover.png"
+      ],
+      "public_paths": []
+    },
+    {
+      "stable_id": "GR-VIS-58ce8c37f366ba2f03cca9c08cba1084c0dbf6a28392df1a16ddbe318925b65c",
+      "sha256": "58ce8c37f366ba2f03cca9c08cba1084c0dbf6a28392df1a16ddbe318925b65c",
+      "bytes": 193237,
+      "historical_source_paths": [
+        "docs/evidence/stage6b/before-r2/viewport-390-hover.png"
+      ],
+      "public_paths": []
+    },
+    {
+      "stable_id": "GR-VIS-5460ccb2e85f0c694c07cf753679b4ea353514e46ef8369cc34ca5532182eb89",
+      "sha256": "5460ccb2e85f0c694c07cf753679b4ea353514e46ef8369cc34ca5532182eb89",
+      "bytes": 158633,
+      "historical_source_paths": [
+        "docs/evidence/stage6b/before/desktop-dialog.png"
+      ],
+      "public_paths": []
+    },
+    {
+      "stable_id": "GR-VIS-9f852a1b560c175bc21d85cefc4910b371f8b07f9e78c6cca59dc92d26f30646",
+      "sha256": "9f852a1b560c175bc21d85cefc4910b371f8b07f9e78c6cca59dc92d26f30646",
+      "bytes": 249391,
+      "historical_source_paths": [
+        "docs/evidence/stage6b/before/desktop-empty-fallback.png"
+      ],
+      "public_paths": []
+    },
+    {
+      "stable_id": "GR-VIS-ca1242193b6bea89e81db8b6ad1542380ff82543ba295e87d4b2f0be76f4a948",
+      "sha256": "ca1242193b6bea89e81db8b6ad1542380ff82543ba295e87d4b2f0be76f4a948",
+      "bytes": 256117,
+      "historical_source_paths": [
+        "docs/evidence/stage6b/before/viewport-1440-hover.png"
+      ],
+      "public_paths": []
+    },
+    {
+      "stable_id": "GR-VIS-ce1762c067027b110c34f72ed5cc41723b80733457031e54bb2f90478dfb1828",
+      "sha256": "ce1762c067027b110c34f72ed5cc41723b80733457031e54bb2f90478dfb1828",
+      "bytes": 191481,
+      "historical_source_paths": [
+        "docs/evidence/stage6b/before/viewport-390-hover.png"
+      ],
+      "public_paths": []
+    },
+    {
+      "stable_id": "GR-VIS-f9af9800dea478eab2f0e93a940508f0599f15c9a8d39dba668e37c38d375846",
+      "sha256": "f9af9800dea478eab2f0e93a940508f0599f15c9a8d39dba668e37c38d375846",
+      "bytes": 227135,
+      "historical_source_paths": [
+        "docs/evidence/stage6b/native-smoke/actual-desktop-dialog.png"
+      ],
+      "public_paths": []
+    },
+    {
+      "stable_id": "GR-VIS-989f3e7bf3a6ae8ec66d5250e07952838d6bc8fe95cfd4c56bc8e886a9df75d6",
+      "sha256": "989f3e7bf3a6ae8ec66d5250e07952838d6bc8fe95cfd4c56bc8e886a9df75d6",
+      "bytes": 317952,
+      "historical_source_paths": [
+        "docs/evidence/stage6b/native-smoke/actual-viewport-1440.png"
+      ],
+      "public_paths": [
+        "docs/assets/dashboard.png"
+      ]
+    },
+    {
+      "stable_id": "GR-VIS-2efc28276fb5515ed1a6adb99cfb4e67cc27bcd7f79d7f47c7d56e1bc392633a",
+      "sha256": "2efc28276fb5515ed1a6adb99cfb4e67cc27bcd7f79d7f47c7d56e1bc392633a",
+      "bytes": 227402,
+      "historical_source_paths": [
+        "docs/evidence/stage6b/native-smoke/actual-viewport-390.png"
+      ],
+      "public_paths": []
+    }
+  ],
+  "reserved_content_count": 49,
+  "reserved_historical_path_count": 50,
+  "three_excluded7a_screenshots": "Not authorized or included; not MIT; no automatic staging.",
+  "associated_documentation_clarification": "Standard MIT text is unaltered; standalone project documentation is not designated part of the explicitly listed licensed Software.",
+  "platform_and_statutory_rights": "Applicable GitHub service permissions and applicable law remain unaffected.",
+  "not_publication_authorization": true,
+  "public_visual_subset_count": 3,
+  "historical_path_note": "The49-source-content inventory has50historicalprovenancepaths;only3selectedvisualsarepublishedhere atpublic_paths. Historicalpathsarenot implied present inthiscuratedrepository."
+}

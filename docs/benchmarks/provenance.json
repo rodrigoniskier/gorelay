@@ -1,0 +1,39 @@
+{
+  "scope": "Historicalboundedexperiments,not a newperformance run;numericprojectionschecked equal to canonical records.",
+  "exploratory_source_sha256": "d9ecaa56bf2d237de8a270ea51b0cd3cc509e5e301ef7ec2d06adf8aac870703",
+  "controlled_source_sha256": "0630f373c31e3bdfd0714a673e43adb3a8a17191efe4558573621e8230d545ca",
+  "controlled_projection_removed_fields": [
+    "schema (local SQL fixture identifier)"
+  ],
+  "controlled_delivered": 9000,
+  "controlled_http_attempts": 9000,
+  "controlled_stats": {
+    "1": {
+      "repeats": 3,
+      "mean_deliveries_per_second": 215.30697513909098,
+      "min": 200.5576115709078,
+      "max": 235.17046595674066,
+      "sample_CV": 0.08297064276800155
+    },
+    "4": {
+      "repeats": 3,
+      "mean_deliveries_per_second": 180.50938968422759,
+      "min": 169.2166422809184,
+      "max": 194.94685691366158,
+      "sample_CV": 0.0728505404214728
+    },
+    "8": {
+      "repeats": 3,
+      "mean_deliveries_per_second": 113.11805961532835,
+      "min": 95.05028303022975,
+      "max": 128.5105479055216,
+      "sample_CV": 0.14931122404205446
+    }
+  },
+  "csv_sha256": {
+    "exploratory-summary.csv": "d9ecaa56bf2d237de8a270ea51b0cd3cc509e5e301ef7ec2d06adf8aac870703",
+    "controlled-runs.csv": "0bd5e6c75baaf606a5ce0504cb7b8a8396a29bb903243c30eeebdb583fa428bf"
+  },
+  "privacy": "No raw environment logs,personal paths,process IDs or database credentials included.",
+  "limits": "Setup/migrations excluded from measurement;sharedWSL/Dockerhost;boundedbatches;no causal orproductioncapacity claim;30secondpilotonly."
+}

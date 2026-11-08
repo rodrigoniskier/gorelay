@@ -1,0 +1,8 @@
+/gorelay
+/gorelay.exe
+
+/.env
+
+# Local Python tooling caches; preserve existing files outside version control.
+__pycache__/
+*.py[cod]

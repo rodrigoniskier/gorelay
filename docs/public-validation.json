@@ -1,0 +1,69 @@
+{
+  "scope": "Exactselectedpublicapplication/modulegraph tested;laterchanges are documentation/evidenceonly.",
+  "normal_PASS": 85,
+  "race_PASS": 85,
+  "inactive_experiment_gates_each": 4,
+  "SQL_SKIPs": 0,
+  "gofmt_vet_staticGo_build": "PASS",
+  "Docker_build": "PASS;project/upstreamnoticesincluded",
+  "compiler": "go version go1.27.3 linux/amd64",
+  "database": "PostgreSQL17.11",
+  "govulncheck": {
+    "scanner": "v1.9.0",
+    "mode": "source/symbol",
+    "database_last_modified": "2026-11-05T23:49:57Z",
+    "finding_events": 0,
+    "not_absolute_absence_proof": true
+  },
+  "Chromium": {
+    "version": "Chrome/156.0.8078.4",
+    "checks": {
+      "ten_actual_sql_deliveries_displayed": true,
+      "same_event_after_two_real_polls": true,
+      "keyboard_continues": true,
+      "escape_restores_invoker": true,
+      "close_button_restores_invoker": true,
+      "no_overflow_1440": true,
+      "no_overflow_390": true,
+      "live_503_to_200_recovery": true,
+      "dead_letter_remains_after_200": true,
+      "sql_14_events_reconciled": true,
+      "no_unhandled_js": true
+    },
+    "checks_passed": 11,
+    "go_exit": {
+      "code": 0,
+      "signal": null
+    },
+    "retained_favicon404": true
+  },
+  "HTTP_SQL_reconciliation": {
+    "events": 14,
+    "delivered": 12,
+    "dead_letter": 2,
+    "attempt_records": 26,
+    "modes": "200healthy,503then200recovery,503exhaustion,200retainsDLQ"
+  },
+  "resources": "ExclusiveDockerbridge;Go2CPU1536MiB;PG1CPU512MiBmax60;loopbacknativefixture. NativeGo runtimecontrolsoftonly;14eventsbounded.",
+  "temporary_resources": "stopped,preserved;no otherserviceschanged",
+  "log_sha256": {
+    "regression.log": "698c835e5629474eb898ebc19d32baf1687e2de9bad90c7efa4ead93c0a6d553",
+    "govulncheck.jsonl": "0b7baa21b609cfa892ba4ec16061e8c9633ee78bebff82e6dc84194ae4a2967b",
+    "docker-build.log": "dbbff803323aa6b11a4948b408fa1c2464ea1dc2310f9faff7f90513ffe680ba",
+    "native-smoke/results.json": "6d31afc2750f9203d9e53e0dcea24495686985401d78ca735172d4eef6c9323a"
+  },
+  "migration_sha256": {
+    "cmd/gorelay/migrations/0001_events.sql": "0a8264692bdf89f6f358e195a21245d1dc859a8b4503a5b2532ad062fd042d5e",
+    "cmd/gorelay/migrations/0002_event_destination.sql": "487bd99acbc88237e2c18a4da3a7b469d8c59cf6087b23e81d52b9033947ddb2",
+    "cmd/gorelay/migrations/0003_processing_leases.sql": "688565f8bd710b434c0548e4eac8018480ec5c771c1dd80cc78feb893495d081",
+    "cmd/gorelay/migrations/0004_http_delivery.sql": "3965d7afcd77ece853eed8c3e6489341a46c743a4f7f4aae47325da3d4c4ff58",
+    "cmd/gorelay/migrations/0005_retry_dead_letter.sql": "3ba603354d55e7b5d1ee073dadf677dc8e9b26dc3bd33f0750b1a819455f5c27"
+  },
+  "module_sha256": {
+    "go.mod": "6a8f02e216499ca93f031bd6822beba3b372e294f583ca76fb4f55ff281a37cb",
+    "go.sum": "c9ec77321f398e347300b758d2bafc7c03983557f5e748c9c017c35c2301b52c"
+  },
+  "benchmark_arithmetic": "PASS,no load generated",
+  "independent_validation": "Separate reviewcontexts/source checks andrealproduceroutputreconciliation;notexternalhuman/legalcertification.",
+  "remote_CI": "Actualoutcome per exactcommit is available inGitHubActions;localresultsdonotreplaceit."
+}

@@ -64,6 +64,10 @@ Upstream terms and full notices are in THIRD-PARTY-NOTICES.md and licenses/.
 
 ## Continuous scanning
 
+The toolchain moved from Go 1.27.3 to 1.27.4 because the first CI `govulncheck` run
+reported GO-2026-6859 (net/http `MaxBytesReader` header race, fixed in 1.27.4) as
+reachable from the event API. The 1.27.3 scan above is therefore historical.
+
 CI runs `govulncheck` on every push and pull request, and `.github/dependabot.yml`
 proposes weekly updates for Go modules, Docker base images and GitHub Actions.
 The one-time classification above remains a historical snapshot, not a guarantee.

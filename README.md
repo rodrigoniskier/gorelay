@@ -42,7 +42,7 @@ open tab, so it is meant for small demo datasets, not large backlogs.
 ## Run locally
 
 Requirements: Docker Engine + Compose, Python 3 and a browser. Docker builds use
-Go 1.27.3; PostgreSQL 17 is the database target. Host Go is optional for the Docker
+Go 1.27.4; PostgreSQL 17 is the database target. Host Go is optional for the Docker
 route. Services must remain on loopback; do not expose or tunnel them.
 
 ```sh
@@ -80,7 +80,7 @@ remain preserved; no `down -v`, `prune` or database deletion is necessary.
 
 ## Test and build
 
-With host Go 1.27.3 and a **dedicated test PostgreSQL 17 database**:
+With host Go 1.27.4 and a **dedicated test PostgreSQL 17 database**:
 
 ```sh
 export TEST_DATABASE_URL='postgres://TEST_USER:TEST_PASSWORD@127.0.0.1:TEST_PORT/TEST_DB?sslmode=disable'

@@ -15,6 +15,13 @@
 - **No deliveries**: workers default to zero. Use the explicit demo helper or
   provide workers, local HTTP mode and a configured destination. Finite budgets,
   expired leases and retry schedules explain temporarily pending/terminal events.
+- **`password authentication failed` with an existing Compose volume**: PostgreSQL
+  applies `POSTGRES_PASSWORD` only when the volume is first created, so a new `.env`
+  password is ignored. The helper prints this hint. Restore the old password in
+  `.env`, or keep your data and change the database password to the `.env` value:
+  `docker compose exec postgres psql -U <user> -d <db>` then `\password <user>`.
+  (Connections from inside the container to 127.0.0.1 are trusted, so a `select 1`
+  there does not prove the password is right.)
 - **Cannot reach Docker/WSL demo**: host networking may terminate in the DockerVM.
   Use the native-binary path in DEMO.md; never widen the listener to 0.0.0.0.
 - **Demo container name exists**: review its image/environment/DB ownership before

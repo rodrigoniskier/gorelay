@@ -63,9 +63,9 @@ observe retries, restore 200 while events remain eligible, or leave 503 until
 attempts exhaust to demonstrate dead-letter retention. Wait five seconds between
 batches. Counters persist across restarts; they need not begin at zero.
 
-Docker Desktop/WSL host networking may refer to the Docker VM. The
-[native-binary fallback and four-minute walkthrough](docs/DEMO.md) describe the
-supported alternative. The application does not load `.env`; the helper reads
+On Docker Desktop/WSL, host networking refers to the Docker VM, so the helper detects
+it and runs the image's binary natively instead (`--docker` forces the container).
+The [native-binary details and four-minute walkthrough](docs/DEMO.md) cover both. The application does not load `.env`; the helper reads
 the owned Compose settings without printing credentials.
 
 To stop the application container you started, use another terminal:

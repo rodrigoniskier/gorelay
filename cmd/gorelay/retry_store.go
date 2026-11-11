@@ -52,31 +52,23 @@ func (s postgresStore) claim(ctx context.Context, duration time.Duration, maxAtt
 
 	// An active last attempt is allowed to finish. Only expired ownership or an
 	// otherwise inactive eligible row can exhaust. No destination is fabricated.
-	_, err = tx.ExecContext(ctx, `
-WITH exhausted AS (
-    SELECT id FROM events
+	// A read-only probe keeps idle polling free of write transactions: the
+	// locking sweep below runs only when exhausted rows actually exist.
+	var needsSweep bool
+	err = tx.QueryRowContext(ctx, `SELECT EXISTS (
+    SELECT 1 FROM events
     WHERE destination_id IS NOT NULL AND fingerprint_version = 2
       AND processing_attempts >= COALESCE(retry_max_attempts, $1::integer)
       AND (status IN ('pending', 'retry_wait')
-           OR (status = 'processing' AND lease_expires_at <= clock_timestamp()))
-    ORDER BY created_at, id
-    FOR UPDATE SKIP LOCKED
-    LIMIT 32
-), finalized AS (
-    UPDATE events AS e
-    SET status = 'dead_letter', retry_max_attempts = COALESCE(e.retry_max_attempts, $1::integer),
-        next_attempt_at = NULL, lease_token = NULL, lease_expires_at = NULL,
-        dead_letter_at = clock_timestamp(), dead_letter_reason = 'attempts_exhausted',
-        last_failure_code = 'attempts_exhausted'
-    FROM exhausted WHERE e.id = exhausted.id
-    RETURNING e.id
-)
-UPDATE event_attempts AS a
-SET outcome = 'lease_expired', finished_at = clock_timestamp(),
-    failure_code = 'lease_expired', http_status = NULL, next_attempt_at = NULL
-FROM finalized WHERE a.event_id = finalized.id AND a.outcome = 'in_progress'`, maxAttempts)
+           OR (status = 'processing' AND lease_expires_at <= clock_timestamp())))`, maxAttempts).Scan(&needsSweep)
 	if err != nil {
 		return Lease{}, err
+	}
+	if needsSweep {
+		err = sweepExhausted(ctx, tx, maxAttempts)
+		if err != nil {
+			return Lease{}, err
+		}
 	}
 
 	var lease Lease
@@ -135,6 +127,33 @@ VALUES($1,$2,$3)`, lease.Event.ID, lease.Attempt, lease.Token)
 	return lease, nil
 }
 
+func sweepExhausted(ctx context.Context, tx *sql.Tx, maxAttempts int) error {
+	_, err := tx.ExecContext(ctx, `
+WITH exhausted AS (
+    SELECT id FROM events
+    WHERE destination_id IS NOT NULL AND fingerprint_version = 2
+      AND processing_attempts >= COALESCE(retry_max_attempts, $1::integer)
+      AND (status IN ('pending', 'retry_wait')
+           OR (status = 'processing' AND lease_expires_at <= clock_timestamp()))
+    ORDER BY created_at, id
+    FOR UPDATE SKIP LOCKED
+    LIMIT 32
+), finalized AS (
+    UPDATE events AS e
+    SET status = 'dead_letter', retry_max_attempts = COALESCE(e.retry_max_attempts, $1::integer),
+        next_attempt_at = NULL, lease_token = NULL, lease_expires_at = NULL,
+        dead_letter_at = clock_timestamp(), dead_letter_reason = 'attempts_exhausted',
+        last_failure_code = 'attempts_exhausted'
+    FROM exhausted WHERE e.id = exhausted.id
+    RETURNING e.id
+)
+UPDATE event_attempts AS a
+SET outcome = 'lease_expired', finished_at = clock_timestamp(),
+    failure_code = 'lease_expired', http_status = NULL, next_attempt_at = NULL
+FROM finalized WHERE a.event_id = finalized.id AND a.outcome = 'in_progress'`, maxAttempts)
+	return err
+}
+
 func validFailureCode(code string) bool {
 	switch code {
 	case "timeout", "network", "http_transient", "http_terminal", "destination_not_configured",
@@ -174,26 +193,30 @@ FROM events WHERE id=$1 FOR UPDATE`, lease.Event.ID).Scan(&status, &token, &atte
 	if status != "processing" || !token.Valid || token.String != lease.Token || attempt != lease.Attempt {
 		return errLeaseLost
 	}
+	// Claim always pins the per-event budget. Falling back to a compiled-in
+	// default here would silently ignore GORELAY_MAX_ATTEMPTS if that changed.
+	if !budget.Valid {
+		return errors.New("event attempt budget is not pinned")
+	}
 
 	var next sql.NullTime
 	var resultingStatus string
 	err = tx.QueryRowContext(ctx, `
 UPDATE events
-SET status = CASE WHEN $3 OR processing_attempts >= COALESCE(retry_max_attempts, $6::integer)
+SET status = CASE WHEN $3 OR processing_attempts >= retry_max_attempts
                   THEN 'dead_letter' ELSE 'retry_wait' END,
-    retry_max_attempts = COALESCE(retry_max_attempts, $6::integer),
-    next_attempt_at = CASE WHEN $3 OR processing_attempts >= COALESCE(retry_max_attempts, $6::integer)
+    next_attempt_at = CASE WHEN $3 OR processing_attempts >= retry_max_attempts
                           THEN NULL ELSE clock_timestamp() + ($5::bigint * interval '1 microsecond') END,
-    dead_letter_at = CASE WHEN $3 OR processing_attempts >= COALESCE(retry_max_attempts, $6::integer)
+    dead_letter_at = CASE WHEN $3 OR processing_attempts >= retry_max_attempts
                           THEN clock_timestamp() ELSE NULL END,
     dead_letter_reason = CASE WHEN $3 THEN 'terminal_failure'
-                             WHEN processing_attempts >= COALESCE(retry_max_attempts, $6::integer)
+                             WHEN processing_attempts >= retry_max_attempts
                              THEN 'attempts_exhausted' ELSE NULL END,
     last_failure_code = $4, lease_token = NULL, lease_expires_at = NULL
 WHERE id=$1 AND lease_token=$2 AND status='processing'
   AND lease_expires_at > clock_timestamp()
 RETURNING status, next_attempt_at`, lease.Event.ID, lease.Token, decision.Terminal,
-		decision.Code, decision.Delay.Microseconds(), DefaultRetryPolicy().MaxAttempts).Scan(&resultingStatus, &next)
+		decision.Code, decision.Delay.Microseconds()).Scan(&resultingStatus, &next)
 	if errors.Is(err, sql.ErrNoRows) {
 		return errLeaseLost
 	}

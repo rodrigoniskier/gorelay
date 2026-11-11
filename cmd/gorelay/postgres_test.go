@@ -301,3 +301,21 @@ func TestDestinationMigrationPreservesLegacy(t *testing.T) {
 		t.Fatalf("upgrade rows %d %v", count, err)
 	}
 }
+
+func TestMigrationGapIsRejected(t *testing.T) {
+	db := integrationDB(t)
+	ctx := t.Context()
+	if err := migrate(ctx, db); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := db.ExecContext(ctx, `DELETE FROM schema_migrations WHERE version='0003_processing_leases.sql'`); err != nil {
+		t.Fatal(err)
+	}
+	err := migrate(ctx, db)
+	if err == nil || !strings.Contains(err.Error(), "gap") {
+		t.Fatalf("history gap accepted or misreported: %v", err)
+	}
+	if readyDatabase(ctx, db) == nil {
+		t.Fatal("database with missing migration reported ready")
+	}
+}

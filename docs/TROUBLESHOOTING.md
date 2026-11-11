@@ -16,8 +16,11 @@
   `docker start -a gorelay-dashboard-demo`; do not delete it or silently reuse a
   stale configuration. Native mode avoids that application-container name.
 - **Go missing**: Docker builds need no host Go. Native builds/tests require
-  Go1.27.3 and GOTOOLCHAIN=local; Docker's own compiled Go version is unrelated.
+  Go1.27.4 and GOTOOLCHAIN=local; Docker's own compiled Go version is unrelated.
 - **Tests skip SQL**: run scripts/verify.sh with a dedicated TEST_DATABASE_URL.
   Never substitute the runtime DB to hide a configuration failure.
 - **CI unavailable**: local success is not a remote run. Check toolchain registry,
   action versions and service startup output before claiming remote compatibility.
+- **Container is unreachable with `-p 8080:8080`**: GoRelay accepts only loopback
+  binds, so a published port cannot reach it. Use `--network host` (the demo helper
+  does) and keep the listener on 127.0.0.1.

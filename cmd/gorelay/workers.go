@@ -83,13 +83,19 @@ func workerConfigFromEnv() (WorkerConfig, error) {
 	return c, nil
 }
 
+// defaultShutdownGrace is how long an in-flight callback may keep running after
+// the pool is asked to stop, so its outcome can still be recorded.
+const defaultShutdownGrace = 8 * time.Second
+
 type WorkerPool struct {
 	store   leaseStore
 	process Processor
 	config  WorkerConfig
 	onError func(error)
-	errorMu sync.Mutex
-	running atomic.Bool
+	// shutdownGrace bounds an in-flight callback after Run's context is canceled.
+	shutdownGrace time.Duration
+	errorMu       sync.Mutex
+	running       atomic.Bool
 }
 
 func NewWorkerPool(store leaseStore, process Processor, c WorkerConfig, onError func(error)) (*WorkerPool, error) {
@@ -99,7 +105,7 @@ func NewWorkerPool(store leaseStore, process Processor, c WorkerConfig, onError 
 	if store == nil || process == nil {
 		return nil, errors.New("active workers require a store and an explicit processor")
 	}
-	return &WorkerPool{store: store, process: process, config: c, onError: onError}, nil
+	return &WorkerPool{store: store, process: process, config: c, onError: onError, shutdownGrace: defaultShutdownGrace}, nil
 }
 
 // Run starts exactly config.Workers loops and joins them on cancellation. It can
@@ -152,29 +158,40 @@ func (p *WorkerPool) work(ctx context.Context) {
 			}
 			continue
 		}
-		if ctx.Err() != nil {
-			return
-		}
 		// This interval bounds cooperative callbacks. DB wall-clock expiry and token
 		// checks remain authoritative even if the host's clock differs or the callback
 		// ignores cancellation. No heartbeat or lease extension in this increment.
-		processCtx, stop := context.WithTimeout(ctx, p.config.LeaseDuration)
+		// A stop request does not cancel the callback at once: it gets shutdownGrace
+		// to finish, and its outcome is recorded with contexts detached from the stop
+		// signal, so a graceful shutdown neither burns the attempt nor loses a
+		// confirmation for a recipient that already accepted the event.
+		processCtx, stop := context.WithTimeout(context.WithoutCancel(ctx), p.config.LeaseDuration)
+		finished := make(chan struct{})
+		go func() {
+			select {
+			case <-ctx.Done():
+				grace := time.NewTimer(p.shutdownGrace)
+				defer grace.Stop()
+				select {
+				case <-grace.C:
+					stop()
+				case <-finished:
+				}
+			case <-finished:
+			}
+		}()
 		err = p.process(processCtx, lease.Event)
 		if err == nil {
 			err = processCtx.Err()
 		}
+		close(finished)
 		stop()
-		if ctx.Err() != nil {
-			return
-		}
+		detached := context.WithoutCancel(ctx)
 		if err != nil {
 			if failures, ok := p.store.(failureLeaseStore); ok {
-				failureCtx, finishFailure := context.WithTimeout(ctx, p.config.DBTimeout)
+				failureCtx, finishFailure := context.WithTimeout(detached, p.config.DBTimeout)
 				failureErr := failures.Fail(failureCtx, lease, err)
 				finishFailure()
-				if ctx.Err() != nil {
-					return
-				}
 				if failureErr != nil {
 					p.report("record_failure", failureErr)
 				}
@@ -185,13 +202,10 @@ func (p *WorkerPool) work(ctx context.Context) {
 			}
 			continue // lease recovers after expiry
 		}
-		completeCtx, finish := context.WithTimeout(ctx, p.config.DBTimeout)
+		completeCtx, finish := context.WithTimeout(detached, p.config.DBTimeout)
 		err = p.store.Complete(completeCtx, lease.Event.ID, lease.Token)
 		finish()
 		if err != nil {
-			if ctx.Err() != nil {
-				return
-			}
 			p.report("complete", err)
 			if !p.wait(ctx) {
 				return

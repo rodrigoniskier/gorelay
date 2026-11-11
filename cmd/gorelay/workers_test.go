@@ -192,3 +192,73 @@ func TestWorkerEnvironment(t *testing.T) {
 		t.Fatalf("enabled command should fail without processor: %v", err)
 	}
 }
+
+// A callback that finishes inside the grace window after a stop request must
+// still be confirmed: the attempt is neither lost nor left to lease expiry.
+func TestWorkerPoolShutdownLetsInFlightCallbackComplete(t *testing.T) {
+	store := &memoryLeaseStore{remaining: 1}
+	cfg := testWorkerConfig()
+	cfg.Workers = 1
+	cfg.LeaseDuration = 10 * time.Second
+	started, release := make(chan struct{}, 1), make(chan struct{})
+	pool, err := NewWorkerPool(store, func(ctx context.Context, _ Event) error {
+		started <- struct{}{}
+		<-release
+		return ctx.Err() // nil: grace has not expired
+	}, cfg, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	pool.shutdownGrace = 5 * time.Second
+	ctx, cancel := context.WithCancel(t.Context())
+	defer cancel()
+	done := make(chan error, 1)
+	go func() { done <- pool.Run(ctx) }()
+	awaitWorkerSignal(t, started)
+	cancel()
+	time.Sleep(50 * time.Millisecond)
+	close(release)
+	awaitWorkerExit(t, done)
+	store.mu.Lock()
+	defer store.mu.Unlock()
+	if store.completed != 1 {
+		t.Fatalf("completed %d, want 1", store.completed)
+	}
+}
+
+// The grace period is bounded: a callback that never returns on its own is
+// canceled when it expires, so shutdown cannot hang.
+func TestWorkerPoolShutdownGraceExpiryCancelsCallback(t *testing.T) {
+	store := &memoryLeaseStore{remaining: 1}
+	cfg := testWorkerConfig()
+	cfg.Workers = 1
+	cfg.LeaseDuration = 10 * time.Second
+	started := make(chan struct{}, 1)
+	var canceled atomic.Bool
+	pool, err := NewWorkerPool(store, func(ctx context.Context, _ Event) error {
+		started <- struct{}{}
+		<-ctx.Done()
+		canceled.Store(true)
+		return ctx.Err()
+	}, cfg, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	pool.shutdownGrace = 100 * time.Millisecond
+	ctx, cancel := context.WithCancel(t.Context())
+	defer cancel()
+	done := make(chan error, 1)
+	go func() { done <- pool.Run(ctx) }()
+	awaitWorkerSignal(t, started)
+	begin := time.Now()
+	cancel()
+	awaitWorkerExit(t, done)
+	if !canceled.Load() || time.Since(begin) < 90*time.Millisecond {
+		t.Fatalf("callback canceled=%v after %v", canceled.Load(), time.Since(begin))
+	}
+	store.mu.Lock()
+	defer store.mu.Unlock()
+	if store.completed != 0 {
+		t.Fatalf("completed %d, want 0", store.completed)
+	}
+}

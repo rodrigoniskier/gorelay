@@ -37,7 +37,7 @@ func run(ctx context.Context, addr string) error {
 	return runConfigured(ctx, addr, nil, true)
 }
 
-// Generic composition preserves Stage3A processing semantics. The normal command
+// Generic composition preserves the injected-processor semantics. The normal command
 // selects local HTTP delivery only under explicit demo configuration.
 func runWithProcessor(ctx context.Context, addr string, process Processor) error {
 	return runConfigured(ctx, addr, process, false)
@@ -89,8 +89,12 @@ func runConfigured(ctx context.Context, addr string, process Processor, enableHT
 		return errors.New("invalid database configuration")
 	}
 	defer db.Close()
-	db.SetMaxOpenConns(20)
-	db.SetMaxIdleConns(5)
+	// Every worker may hold a connection for Claim/Complete/Fail at the same
+	// time, and the API and dashboard need headroom of their own; a fixed small
+	// pool would starve Claim into spurious DB-timeout errors.
+	maxConns := max(20, workerConfig.Workers+8)
+	db.SetMaxOpenConns(maxConns)
+	db.SetMaxIdleConns(min(maxConns, max(5, workerConfig.Workers)))
 	db.SetConnMaxLifetime(30 * time.Minute)
 	startup, cancel := context.WithTimeout(ctx, 30*time.Second)
 	err = migrate(startup, db)

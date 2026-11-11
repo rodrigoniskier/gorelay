@@ -1,6 +1,9 @@
 name: Go CI
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [main]
+  pull_request:
 
 permissions:
   contents: read
@@ -15,7 +18,7 @@ jobs:
       TEST_DATABASE_URL: postgres://gorelay:gorelay-ci-only@127.0.0.1:5432/gorelay_test?sslmode=disable
     services:
       postgres:
-        image: postgres:17
+        image: postgres:17@sha256:ff87138949ad9a46f32ff23bd6852b52ce024a13dffe9b4087be98292cdd3b4f
         env:
           POSTGRES_DB: gorelay_test
           POSTGRES_USER: gorelay
@@ -39,6 +42,8 @@ jobs:
         run: go version
       - name: Verify with required PostgreSQL integration and race detector
         run: sh scripts/verify.sh
+      - name: Scan dependencies and stdlib for known vulnerabilities
+        run: go run golang.org/x/vuln/cmd/govulncheck@v1.9.0 ./...
       - name: Check curated benchmark arithmetic (no load)
         run: python3 scripts/check-benchmarks.py
       - name: Build runtime Docker image (local only)

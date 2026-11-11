@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"errors"
 	"net/http"
+	"sync"
 	"time"
 )
 
@@ -131,7 +132,34 @@ func readDashboardDetail(ctx context.Context, db *sql.DB, id string) (dashboardD
 	}
 	return d, tx.Commit()
 }
+
+// overviewCache shares one aggregate read among concurrent dashboard tabs: the
+// counters are full-table aggregates, so N open tabs would otherwise multiply
+// that cost. Staleness is bounded by overviewTTL, below the 3s UI refresh.
+const overviewTTL = time.Second
+
+type overviewCache struct {
+	mu      sync.Mutex
+	value   dashboardOverview
+	fetched time.Time
+}
+
+func (c *overviewCache) get(ctx context.Context, db *sql.DB) (dashboardOverview, error) {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	if !c.fetched.IsZero() && time.Since(c.fetched) < overviewTTL {
+		return c.value, nil
+	}
+	o, err := readDashboardOverview(ctx, db)
+	if err != nil {
+		return o, err
+	}
+	c.value, c.fetched = o, time.Now()
+	return o, nil
+}
+
 func registerDashboardData(mux *http.ServeMux, db *sql.DB) {
+	cache := &overviewCache{}
 	mux.HandleFunc("GET /dashboard/api/overview", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Cache-Control", "no-store")
 		if db == nil {
@@ -140,7 +168,7 @@ func registerDashboardData(mux *http.ServeMux, db *sql.DB) {
 		}
 		ctx, cancel := context.WithTimeout(r.Context(), 3*time.Second)
 		defer cancel()
-		o, err := readDashboardOverview(ctx, db)
+		o, err := cache.get(ctx, db)
 		if err != nil {
 			eventError(w, 503, "dashboard storage unavailable")
 			return

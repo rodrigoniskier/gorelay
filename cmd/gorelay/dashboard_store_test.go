@@ -131,3 +131,25 @@ func TestDashboardBoundedListAndHTTPFailures(t *testing.T) {
 // Compile-time guard that the data API stays tied to PostgreSQL, rather than a
 // synthetic metrics provider or volatile counters.
 var _ func(*http.ServeMux, *sql.DB) = registerDashboardData
+
+func TestOverviewCacheSharesReadWithinTTL(t *testing.T) {
+	db := integrationDB(t)
+	if err := migrate(t.Context(), db); err != nil {
+		t.Fatal(err)
+	}
+	var c overviewCache
+	first, err := c.get(t.Context(), db)
+	if err != nil {
+		t.Fatal(err)
+	}
+	insertLeaseEvent(t, db, "cache-probe")
+	second, err := c.get(t.Context(), db)
+	if err != nil || second.Total != first.Total {
+		t.Fatalf("read within TTL was not shared: %d vs %d err %v", first.Total, second.Total, err)
+	}
+	time.Sleep(overviewTTL + 50*time.Millisecond)
+	third, err := c.get(t.Context(), db)
+	if err != nil || third.Total != first.Total+1 {
+		t.Fatalf("expired cache not refreshed: %d err %v", third.Total, err)
+	}
+}

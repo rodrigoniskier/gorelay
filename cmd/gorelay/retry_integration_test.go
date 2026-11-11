@@ -615,3 +615,34 @@ func TestRetryRuntime503Then200(t *testing.T) {
 	}
 	assertRetryCount(t, db, e.ID, 2)
 }
+
+// A stop request while a recipient is mid-delivery must not burn the attempt or
+// drop the confirmation: the in-flight callback finishes and is recorded.
+func TestGracefulShutdownRecordsInFlightDelivery(t *testing.T) {
+	db := leaseDB(t)
+	e := insertLeaseEvent(t, db, "graceful-shutdown")
+	cfg := WorkerConfig{Workers: 1, LeaseDuration: 30 * time.Second, PollInterval: 10 * time.Millisecond, DBTimeout: time.Second}
+	started, release := make(chan struct{}, 1), make(chan struct{})
+	pool, err := NewWorkerPool(retryTestStore(db, retryTestPolicy()), func(context.Context, Event) error {
+		started <- struct{}{}
+		<-release
+		return nil // recipient accepted
+	}, cfg, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	ctx, cancel := context.WithCancel(t.Context())
+	defer cancel()
+	done := make(chan error, 1)
+	go func() { done <- pool.Run(ctx) }()
+	awaitWorkerSignal(t, started)
+	cancel() // SIGTERM while the delivery is in flight
+	time.Sleep(50 * time.Millisecond)
+	close(release)
+	awaitWorkerExit(t, done)
+	awaitDeliveryState(t, db, e.ID, "delivered")
+	assertRetryCount(t, db, e.ID, 1)
+	if got := attemptOutcomes(t, db, e.ID); len(got) != 1 || got[0] != "delivered" {
+		t.Fatalf("attempt history %v", got)
+	}
+}

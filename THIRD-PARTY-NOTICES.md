@@ -14,7 +14,7 @@ legal certification or a complete tool/test/environment SBOM.
 | github.com/jackc/puddle/v2 | v2.2.3 | MIT | [Text](licenses/third-party/github.com_jackc_puddle_v2-v2.2.3.txt) |
 | golang.org/x/sync | v0.22.0 | BSD-3-Clause | [Text](licenses/third-party/golang.org_x_sync-v0.22.0.txt) |
 | golang.org/x/text | v0.41.0 | BSD-3-Clause | [Text](licenses/third-party/golang.org_x_text-v0.41.0.txt) |
-| Go runtime/standard library |1.27.3|BSD-style Go license|[Text](licenses/third-party/Go-1.27.3.txt)|
+| Go runtime/standard library |1.27.4|BSD-style Go license|[Text](licenses/third-party/Go-1.27.4.txt)|
 
 Charts were generated with Matplotlib; SVG glyph identifiers reference DejaVu Sans.
 Their rendering metadata is retained; the historical visual contents retain the

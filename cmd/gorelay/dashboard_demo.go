@@ -22,7 +22,8 @@ const dashboardDestination = "dashboard-demo"
 type dashboardDemo struct {
 	mu        sync.Mutex
 	mode      string
-	token     string
+	token     string // CSRF token for browser controls
+	receiver  string // independent secret path of the built-in recipient
 	nextBatch time.Time
 	server    *http.Server
 	processor *HTTPProcessor
@@ -32,16 +33,22 @@ func newDashboardDemo(c WorkerConfig) (*dashboardDemo, error) {
 	if c.Workers == 0 {
 		return nil, errors.New("dashboard demo requires explicit GORELAY_WORKERS > 0")
 	}
-	var secret [32]byte
-	if _, err := rand.Read(secret[:]); err != nil {
+	// The CSRF token and the recipient's URL path are separate secrets so that
+	// learning one (the CSRF token is served to the dashboard page) never
+	// reveals the other.
+	var csrf, receiver [32]byte
+	if _, err := rand.Read(csrf[:]); err != nil {
 		return nil, err
 	}
-	d := &dashboardDemo{mode: "200", token: hex.EncodeToString(secret[:])}
+	if _, err := rand.Read(receiver[:]); err != nil {
+		return nil, err
+	}
+	d := &dashboardDemo{mode: "200", token: hex.EncodeToString(csrf[:]), receiver: hex.EncodeToString(receiver[:])}
 	listener, err := net.Listen("tcp", "127.0.0.1:0")
 	if err != nil {
 		return nil, err
 	}
-	path := "/receive/" + d.token
+	path := "/receive/" + d.receiver
 	mux := http.NewServeMux()
 	mux.HandleFunc("POST "+path, func(w http.ResponseWriter, r *http.Request) {
 		host, _, err := net.SplitHostPort(r.RemoteAddr)
@@ -196,7 +203,7 @@ func generateDemoEvents(ctx context.Context, db *sql.DB, count int) error {
 		if err != nil {
 			return err
 		}
-		// Reuse the canonical Stage2 fingerprint; each synthetic event has a fresh key.
+		// Reuse the canonical v2 event fingerprint; each synthetic event has a fresh key.
 		in := eventInput{DestinationID: dashboardDestination, Type: "demo.delivery", Payload: json.RawMessage(`{"synthetic":true}`)}
 		canonical, err := canonicalInput(in)
 		if err != nil {

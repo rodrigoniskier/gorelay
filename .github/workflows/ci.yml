@@ -1,6 +1,9 @@
 name: Go CI
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [main]
+  pull_request:
 
 permissions:
   contents: read
@@ -39,6 +42,8 @@ jobs:
         run: go version
       - name: Verify with required PostgreSQL integration and race detector
         run: sh scripts/verify.sh
+      - name: Scan dependencies and stdlib for known vulnerabilities
+        run: go run golang.org/x/vuln/cmd/govulncheck@v1.1.4 ./...
       - name: Check curated benchmark arithmetic (no load)
         run: python3 scripts/check-benchmarks.py
       - name: Build runtime Docker image (local only)

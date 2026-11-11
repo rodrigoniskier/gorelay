@@ -456,6 +456,7 @@ func TestTwoRealPoolsOneEventAndCancellation(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
+		pool.shutdownGrace = 50 * time.Millisecond // this test asserts cancellation propagates
 		go func() { done <- pool.Run(ctx) }()
 	}
 	awaitWorkerSignal(t, started)

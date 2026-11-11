@@ -48,5 +48,13 @@ workers fail them without making an arbitrary network request.
 GET `/v1/events/{uuid}` returns 400 for invalid UUID, 404 for missing event.
 Lease tokens are not exposed. `/healthz` checks liveness; `/readyz` checks schema
 and DB. DB operations have five-second deadlines; readiness two seconds and
-startup 30 seconds. Graceful shutdown has a ten-second HTTP drain budget.
+startup 30 seconds. Graceful shutdown has a ten-second HTTP drain budget. On
+SIGINT/SIGTERM workers stop claiming, and an in-flight delivery gets up to eight
+seconds to finish; its outcome is still recorded (delivered or failure) instead of
+being abandoned to lease expiry, so a restart does not consume an extra attempt or
+resend an event the recipient already accepted. A callback that outlives that grace
+is canceled. The database pool is sized `max(20, workers + 8)` connections. Idle
+workers poll with a read-only probe; the locking exhaustion sweep writes only when
+exhausted events exist. Migrations must be a contiguous applied prefix; a gap fails
+startup and readiness.
 There is no authentication or public networking support.

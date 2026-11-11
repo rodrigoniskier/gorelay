@@ -61,3 +61,9 @@ Those are residual compatibility limits,not a claim that current HTTP exploits e
 The local-only demo has no authentication,tenant isolation or production transport.
 Reassess future configuration/features and repeat the scan after dependency changes.
 Upstream terms and full notices are in THIRD-PARTY-NOTICES.md and licenses/.
+
+## Continuous scanning
+
+CI runs `govulncheck` on every push and pull request, and `.github/dependabot.yml`
+proposes weekly updates for Go modules, Docker base images and GitHub Actions.
+The one-time classification above remains a historical snapshot, not a guarantee.

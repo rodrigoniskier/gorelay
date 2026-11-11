@@ -35,6 +35,10 @@ Consumers should durably deduplicate `GoRelay-Delivery-ID`. Fencing protects SQL
 transitions, not external side effects. Finite attempts mean some events never
 arrive. There is no exactly-once or universal delivery guarantee.
 
+Known lab limits: events and attempt history are never pruned, and the dashboard
+overview recomputes its counters with full-table aggregates every few seconds per
+open tab, so it is meant for small demo datasets, not large backlogs.
+
 ## Run locally
 
 Requirements: Docker Engine + Compose, Python 3 and a browser. Docker builds use

@@ -224,3 +224,17 @@ func TestDashboardLive429AndTimeout(t *testing.T) {
 		t.Fatalf("timeout result %v ctx %v", err, ctx.Err())
 	}
 }
+
+// The CSRF token is handed to the dashboard page; it must not double as the
+// secret path of the built-in recipient.
+func TestDashboardCSRFTokenIsNotTheReceiverSecret(t *testing.T) {
+	d := dashboardTestDemo(t)
+	if d.token == "" || d.receiver == "" || d.token == d.receiver {
+		t.Fatal("CSRF token and receiver secret must be distinct and non-empty")
+	}
+	for id, endpoint := range d.processor.destinations {
+		if strings.Contains(endpoint, d.token) || !strings.HasSuffix(endpoint, "/receive/"+d.receiver) {
+			t.Fatalf("destination %s does not use the independent receiver secret", id)
+		}
+	}
+}

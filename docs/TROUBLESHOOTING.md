@@ -7,6 +7,11 @@
 - **Readiness503/startup fails**: verify the owned database is healthy and runtime
   DSN correct. Migration checksum/version failures need investigation, not editing
   old migrations or dropping the database.
+- **`database migration failed: ...` at startup**: the text after the colon is the
+  real cause. `connect`/`password authentication failed` mean the DSN or credentials
+  are wrong; `migration checksum mismatch`, `unknown migrations` or `history has a
+  gap` mean the schema was created by a different build. Point the demo at a fresh
+  database or schema rather than editing migrations or dropping data you may need.
 - **No deliveries**: workers default to zero. Use the explicit demo helper or
   provide workers, local HTTP mode and a configured destination. Finite budgets,
   expired leases and retry schedules explain temporarily pending/terminal events.

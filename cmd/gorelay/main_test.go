@@ -6,6 +6,7 @@ import (
 	"net"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 	"time"
 )
@@ -118,5 +119,22 @@ func TestShutdownDrainsActiveRequest(t *testing.T) {
 		}
 	case <-deadline.C:
 		t.Fatal("server did not stop after the request drained")
+	}
+}
+
+// A startup failure must say why (here: connection refused) without leaking the
+// DSN password that the operator supplied.
+func TestStartupMigrationErrorExplainsCauseWithoutLeakingPassword(t *testing.T) {
+	t.Setenv("DATABASE_URL", "postgres://gorelay:s3cret-pw-9f2@127.0.0.1:1/gorelay?sslmode=disable")
+	err := run(t.Context(), "127.0.0.1:0")
+	if err == nil {
+		t.Fatal("startup succeeded against an unreachable database")
+	}
+	msg := err.Error()
+	if !strings.Contains(msg, "database migration failed") || !strings.Contains(msg, "connect") {
+		t.Fatalf("error does not explain the cause: %q", msg)
+	}
+	if strings.Contains(msg, "s3cret-pw-9f2") {
+		t.Fatalf("error leaks the password: %q", msg)
 	}
 }

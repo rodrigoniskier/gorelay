@@ -51,6 +51,9 @@ if args.native:
         subprocess.run([str(binary)], env=appenv, check=True)
     except KeyboardInterrupt:
         pass  # The child receives SIGINT and Go joins its workers on shutdown.
+    except subprocess.CalledProcessError as exc:
+        raise SystemExit(f"GoRelay exited with status {exc.returncode}. The reason is in the "
+                         "ERROR line above; see docs/TROUBLESHOOTING.md.")
 else:
     # Never remove or reuse an existing container: it may hold a stale configuration.
     if subprocess.run(["docker", "container", "inspect", "gorelay-dashboard-demo"],
@@ -62,8 +65,16 @@ else:
     # output or the command line (it remains in the container environment).
     dockerenv = os.environ.copy()
     dockerenv["DATABASE_URL"] = dsn
-    subprocess.run(["docker", "run", "--name", "gorelay-dashboard-demo", "--network", "host",
-                    "-e", "DATABASE_URL", "-e", "GORELAY_ADDR=127.0.0.1:18084",
-                    "-e", "GORELAY_DASHBOARD_DEMO=1", "-e", "GORELAY_WORKERS=4",
-                    "-e", "GORELAY_RETRY_BASE_DELAY=1s", "-e", "GORELAY_RETRY_MAX_DELAY=4s",
-                    "gorelay:dashboard-demo"], check=True, env=dockerenv)
+    try:
+        subprocess.run(["docker", "run", "--name", "gorelay-dashboard-demo", "--network", "host",
+                        "-e", "DATABASE_URL", "-e", "GORELAY_ADDR=127.0.0.1:18084",
+                        "-e", "GORELAY_DASHBOARD_DEMO=1", "-e", "GORELAY_WORKERS=4",
+                        "-e", "GORELAY_RETRY_BASE_DELAY=1s", "-e", "GORELAY_RETRY_MAX_DELAY=4s",
+                        "gorelay:dashboard-demo"], check=True, env=dockerenv)
+    except KeyboardInterrupt:
+        pass
+    except subprocess.CalledProcessError as exc:
+        raise SystemExit(f"The demo container exited with status {exc.returncode}. The reason is in "
+                         "the ERROR line above. The stopped container gorelay-dashboard-demo is "
+                         "kept; inspect it, then remove it yourself before retrying "
+                         "(see docs/TROUBLESHOOTING.md).")

@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"fmt"
 	"io"
 	"log/slog"
 	"net"
@@ -100,7 +101,10 @@ func runConfigured(ctx context.Context, addr string, process Processor, enableHT
 	err = migrate(startup, db)
 	cancel()
 	if err != nil {
-		return errors.New("database migration failed")
+		// Keep the cause: "migration failed" alone cannot tell a refused connection,
+		// a bad password and a failing migration apart. Driver errors name the
+		// user, database and host, never the password (pinned by a test).
+		return fmt.Errorf("database migration failed: %w", err)
 	}
 	listener, err := net.Listen("tcp", addr)
 	if err != nil {

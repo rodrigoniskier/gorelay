@@ -25,10 +25,12 @@ exists, use `docker start -a gorelay-dashboard-demo` rather than creating anothe
 Host networking can refer to the Docker VM rather than the browser host. This
 was observed during validation: the container listener was healthy but WSL
 Chromium received connection refused. `scripts/demo-local.py` now detects Docker
-Desktop and does the following automatically: it copies the static binary out of the
+Desktop on a Linux host (including WSL) and does the following automatically: it copies the static binary out of the
 image with a throw-away container (created and removed by the script) and runs it
 natively, so the plain `python3 scripts/demo-local.py` is enough. Pass `--docker`
-to force the container variant anyway. To do the same by hand with a binary you
+to force the container variant anyway. On macOS or native Windows the image's Linux
+binary cannot run, so the script only warns; build a host binary with Go and use
+`--native` there. To do the same by hand with a binary you
 keep, use the image binary locally:
 
 ```sh

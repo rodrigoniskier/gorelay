@@ -3,8 +3,8 @@
 Requires the compose PostgreSQL container and a locally built demo image.
 Existing containers and volumes are never removed by this script. By default it
 runs the demo as a container, except on Docker Desktop, where `--network host`
-does not reach the host's loopback: there it copies the static binary out of the
-image and runs it natively instead (a throw-away container created and removed
+does not reach the host's loopback: on a Linux host (including WSL) it copies the
+static binary out of the image and runs it natively instead (a throw-away container created and removed
 by this script is the only container it ever deletes).
 """
 import argparse
@@ -130,9 +130,17 @@ appenv.update(DATABASE_URL=dsn, GORELAY_ADDR='127.0.0.1:18084',
               GORELAY_RETRY_BASE_DELAY='1s', GORELAY_RETRY_MAX_DELAY='4s')
 use_native = args.native is not None
 if not use_native and not args.docker and docker_desktop():
-    print("Docker Desktop detected: running the demo natively, because `--network host` "
-          "would open the port inside Docker's VM, not on this machine.", file=sys.stderr)
-    use_native = True
+    if sys.platform.startswith("linux"):
+        print("Docker Desktop detected: running the demo natively, because `--network host` "
+              "would open the port inside Docker's VM, not on this machine.", file=sys.stderr)
+        use_native = True
+    else:
+        # The image binary is a Linux executable; it cannot run on a macOS/Windows host.
+        print("Docker Desktop on a non-Linux host detected: the container's `--network host` "
+              "port may not be reachable from your browser, and the image's Linux binary "
+              "cannot run here. If the dashboard does not open, build a host binary with "
+              "`go build -o gorelay ./cmd/gorelay` and run `--native ./gorelay`.",
+              file=sys.stderr)
 if use_native:
     if args.native:
         binary = args.native.resolve(strict=True)

@@ -24,7 +24,12 @@ exists, use `docker start -a gorelay-dashboard-demo` rather than creating anothe
 
 Host networking can refer to the Docker VM rather than the browser host. This
 was observed during validation: the container listener was healthy but WSL
-Chromium received connection refused. Use the same image binary locally:
+Chromium received connection refused. `scripts/demo-local.py` now detects Docker
+Desktop and does the following automatically: it copies the static binary out of the
+image with a throw-away container (created and removed by the script) and runs it
+natively, so the plain `python3 scripts/demo-local.py` is enough. Pass `--docker`
+to force the container variant anyway. To do the same by hand with a binary you
+keep, use the image binary locally:
 
 ```sh
 docker create --name gorelay-dashboard-artifact gorelay:dashboard-demo

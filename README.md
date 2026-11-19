@@ -8,6 +8,18 @@ production delivery service.
 
 ![GoRelay local dashboard](docs/assets/dashboard.png)
 
+## Problem, audience and outcome
+
+**Problem.** Services that notify other systems over HTTP (webhooks, integrations) can lose or duplicate events when a recipient is slow or down, or when the sender crashes in the middle of a delivery.
+
+**Who it is for.** Backend engineers learning or reviewing reliable-delivery patterns. This is a study project, not a production delivery service (see below).
+
+**What it delivers.** Transactional event persistence, global idempotency keys, bounded workers, retries with exponential backoff and jitter, expiring leases with token fencing, dead-letter retention and a local dashboard with synthetic failure scenarios.
+
+**Technologies.** Go, PostgreSQL, SQL, Docker, HTTP/REST, concurrency, GitHub Actions.
+
+**Quality and evidence.** 92 Go test functions in 15 test files, including real PostgreSQL integration tests, race detection and controlled recovery tests; CI workflow; architecture decision records and benchmark results with methodology under `docs/`.
+
 ## Engineering features
 
 - Transactional event persistence and globally unique idempotency keys: matching
